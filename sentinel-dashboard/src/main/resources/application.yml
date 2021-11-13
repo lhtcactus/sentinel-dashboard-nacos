@@ -1,0 +1,45 @@
+#cookie name setting
+server:
+  servlet:
+    session:
+      cookie:
+        name: sentinel_dashboard_cookie
+#spring settings
+spring:
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+
+#logging settings
+logging:
+  level:
+    org:
+      springframework:
+        web: INFO
+  file: '${user:home}/logs/csp/sentinel-dashboard.log'
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+
+auth:
+  #auth settings
+  filter:
+    exclude-urls: /,/auth/login,/auth/logout,/registry/machine,/version
+    exclude-url-suffixes: htm,html,js,css,map,ico,ttf,woff,png
+  # If auth.enabled=false, Sentinel console disable login
+  username: sentinel
+  password: sentinel
+
+# Inject the dashboard version. It's required to enable
+# filtering in pom.xml for this resource file.
+sentinel:
+  dashboard:
+    version: @project.version@
+  # com.alibaba.csp.sentinel.dashboard.rule.nacos.NacosPropertiesConfiguration
+  nacos:
+    serverAddr: 192.168.56.102:8848
+    namespace: sentinel
+    username: nacos
+    password: nacos
+    groupId: SENTINEL_GROUP

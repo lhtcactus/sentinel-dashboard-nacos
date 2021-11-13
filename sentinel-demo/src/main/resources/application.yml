@@ -1,0 +1,72 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: sentinel-demo
+  cloud:
+    sentinel:
+      #开启项目启动后立刻想sentinel控制台发起心跳
+      eager: true
+      #关闭SentinelWebInterceptor注入，因为和SentinelResourceAspect功能重复，没有必要存在
+      filter:
+        enabled: false
+      transport:
+        #本机ip，用于sentinel控制台访问该项目
+        client-ip: 127.0.0.1
+        # 尽量大一点，不然端口占用后 sentinel会自己找新的没占用端口，这样在sentinel的控制台就不知道是哪个机器了
+        port: 18719
+        #指定sentinel控制台
+        dashboard: 127.0.0.1:8080
+      #配置规则获取，sentinel默认存储在内存中，当前存储在naocs中，
+      #nacos的相关参数要和sentinel控制台的参数配合才能找到存储的规则，因为规则是在控制台添加的
+      datasource:
+        flow:
+          nacos:
+            server-addr: 192.168.56.102:8848
+            username: nacos
+            password: nacos
+            group-id: SENTINEL_GROUP
+            namespace: sentinel
+            data-id: ${spring.application.name}-flow-rules
+            rule-type: flow #com.alibaba.cloud.sentinel.datasource.RuleType
+            data-type: json
+        paramFlow:
+          nacos:
+            server-addr: 192.168.56.102:8848
+            username: nacos
+            password: nacos
+            group-id: SENTINEL_GROUP
+            namespace: sentinel
+            data-id: ${spring.application.name}-param-rules
+            rule-type: param-flow #com.alibaba.cloud.sentinel.datasource.RuleType
+            data-type: json
+        authority:
+          nacos:
+            server-addr: 192.168.56.102:8848
+            username: nacos
+            password: nacos
+            group-id: SENTINEL_GROUP
+            namespace: sentinel
+            data-id: ${spring.application.name}-authority-rules
+            rule-type: authority #com.alibaba.cloud.sentinel.datasource.RuleType
+            data-type: json
+        degrade:
+          nacos:
+            server-addr: 192.168.56.102:8848
+            username: nacos
+            password: nacos
+            group-id: SENTINEL_GROUP
+            namespace: sentinel
+            data-id: ${spring.application.name}-degrade-rules
+            rule-type: degrade #com.alibaba.cloud.sentinel.datasource.RuleType
+            data-type: json
+        system:
+          nacos:
+            server-addr: 192.168.56.102:8848
+            username: nacos
+            password: nacos
+            group-id: SENTINEL_GROUP
+            namespace: sentinel
+            data-id: ${spring.application.name}-system-rules
+            rule-type: system #com.alibaba.cloud.sentinel.datasource.RuleType
+            data-type: json
